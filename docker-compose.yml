@@ -1,0 +1,28 @@
+version: '2'
+services:
+  nginx:
+    build:
+      context: ./env/docker/nginx
+    container_name: dockerizedDjangoNginx01
+    networks:
+      - docker-net
+    volumes:
+      - ./server/django_blog/static:/static
+    links:
+      - web
+    ports:
+      - "9000:80"
+
+  web:
+    build: ./env/docker/python
+    container_name: dockerizedDjangoPython01
+    networks:
+      - docker-net
+    command: bash -c "cd /usr/src/api && pip install -r requirements.txt && cd django_blog && python manage.py makemigrations && python manage.py migrate && gunicorn django_blog.wsgi -b 0.0.0.0:8000"
+    expose:
+      - "8000"
+    volumes:
+      - ./server:/usr/src/api
+
+networks:
+  docker-net:
