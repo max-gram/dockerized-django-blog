@@ -1,6 +1,7 @@
 include env/utils/colors.sh
 
-dev: FORCE
+.PHONY: dev
+dev:
 	@echo "${CYAN}-> Stopping environment ${NC}"
 	docker-compose down
 	docker-compose rm -vf
@@ -8,5 +9,3 @@ dev: FORCE
 	docker-compose build
 	@echo "${GREEN}-> Starting -= DEV =- environment ${NC}"
 	docker-compose up
-
-FORCE:
